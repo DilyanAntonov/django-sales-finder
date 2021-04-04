@@ -1,18 +1,5 @@
 {% extends "main/base.html" %}
 
 {% block content %}
-    {% for item in items %}
-        <div class='container-fluid'>
-            <div class="card col-md-20 col-10 mt-10"> 
-                <img class='mx-auto img-thumbnail' src="{{ item.pic }}" width="auto" height="auto" />
-                <div class="card-body text-center mx-auto">
-                    <div class='cvp'>
-                        <h5 class="card-title font-weight-bold">{{ item.title }}</h5>
-                        <p class="card-text">{{ item.disc_price }} лв</p>
-                        <p class="org-price">{{ item.org_price }} лв</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
+<h1>This is the search page</h1>
 {% endblock content %}
