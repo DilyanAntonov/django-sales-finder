@@ -1,5 +1,11 @@
 from django.db import models
 
+class Search(models.Model):
+    url = models.TextField()
+
+    def __str__(self):
+        return self.url
+
 class Item(models.Model):
     title = models.CharField(max_length=100)
     brand = models.CharField(max_length=50)
