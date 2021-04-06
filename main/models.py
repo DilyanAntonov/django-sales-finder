@@ -1,7 +1,12 @@
 from django.db import models
 
+SIZE_CHOICES = [('XL', 'xl'), 
+                ('2XL', '2xl'), 
+                ('3XL', '3xl')]
+
 class Search(models.Model):
     url = models.TextField()
+    size = models.CharField(max_length=4, choices=SIZE_CHOICES, default=SIZE_CHOICES[0][0])
 
     def __str__(self):
         return self.url

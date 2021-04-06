@@ -3,29 +3,39 @@ from bs4 import BeautifulSoup as soup
 
 import json
 
-def FashionDaysScraper(url):
+def FashionDaysScraper(url, size):
     all_items = []
     page_num = 1
-    # my_url = f"{url}?page={page_num}"
+    last_page=1
     uClient = uReq(url)
+
+    many_pages = False
 
     page_html = uClient.read()
     page_soup = soup(page_html, "html.parser")
 
-    # Checks if there are multiple pages 
-    # #TODO Can be done better
-    items_count = int(page_soup.findAll("div", {"class":"absolute"})[0].text.replace(" ", "")[:-9])
-    many_pages = False
+    # Check if there are multiple pages 
+    items_count = page_soup.findAll("div", {"class":"absolute"})[0].text.replace(" ", "")[:-9]
+    try:
+        items_count = int(items_count)
+    except:
+        items_count = 1
 
     if (items_count>90):
         many_pages = True
         last_page = int(page_soup.findAll("a", {"class":"paginationLink paginationLastPage"})[0].text)
-    else:
-        last_page=1
+
+    #Check for sizes
+    sizes_url = f'?size[70__{size}]=70__{size}'
+    
 
     for i in range(0, last_page):
-        my_url = my_url = f"{url}?page={page_num}"
-        uClient = uReq(my_url)
+        if many_pages:
+            search_url = f"{url}?page={page_num}{sizes_url}"
+        else:
+            search_url = f"{url}{sizes_url}"
+
+        uClient = uReq(search_url)
 
         page_html = uClient.read()
         page_soup = soup(page_html, "html.parser")

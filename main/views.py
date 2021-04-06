@@ -24,10 +24,10 @@ def home(request):
 def search(request):
     Item.objects.all().delete()
 
-
     url = model_to_dict(Search.objects.filter()[0])['url']
+    size = model_to_dict(Search.objects.filter()[0])['size']
    
-    all_items = FashionDaysScraper(url)
+    all_items = FashionDaysScraper(url, size)
 
     for item in all_items:
         product = Item()
