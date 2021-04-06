@@ -3,14 +3,18 @@
 {% block content %}
     {% for item in items %}
         <div class='container'>
-            <div class="card col-md-20 col-10 mt-10"> 
-                <img class='mx-auto img-thumbnail' src="{{ item.pic }}" width="auto" height="auto" />
-                <div class="card-body text-center mx-auto">
-                    <div class='cvp'>
-                        <h5 class="card-title font-weight-bold"><a href="{{ item.link }}">{{ item.title }}</a></h5>
-                        <h4>{{ item.brand }}</h4>
-                        <p class="card-text">{{ item.disc_price }} лв</p>
-                        <p class="org-price">{{ item.org_price }} лв</p>
+            <div class='row'>
+                <div class='col'>
+                    <div class="card"> 
+                        <img class='mx-auto img-thumbnail' src="{{ item.pic }}" width="auto" height="auto" />
+                        <div class="card-body text-center mx-auto">
+                            <div class='cvp'>
+                                <h5 class="card-title font-weight-bold"><a href="{{ item.link }}">{{ item.title }}</a></h5>
+                                <h4>{{ item.brand }}</h4>
+                                <p class="card-text">{{ item.disc_price }} лв</p>
+                                <p class="org-price">{{ item.org_price }} лв</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

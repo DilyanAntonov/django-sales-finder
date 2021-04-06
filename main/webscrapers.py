@@ -6,16 +6,22 @@ import json
 def FashionDaysScraper(url, size):
     all_items = []
     page_num = 1
-    last_page=1
-    uClient = uReq(url)
+    last_page = 1
+
+    sizes_url = f'size[70__{size}]=70__{size}'
+
+    uClient = uReq(f'{url}?{sizes_url}')
 
     many_pages = False
 
+    # Check if page is not found
     page_html = uClient.read()
     page_soup = soup(page_html, "html.parser")
 
-    # Check if there are multiple pages 
+    # Check if there are multiple pages
     items_count = page_soup.findAll("div", {"class":"absolute"})[0].text.replace(" ", "")[:-9]
+
+    # Item Count
     try:
         items_count = int(items_count)
     except:
@@ -25,15 +31,13 @@ def FashionDaysScraper(url, size):
         many_pages = True
         last_page = int(page_soup.findAll("a", {"class":"paginationLink paginationLastPage"})[0].text)
 
-    #Check for sizes
-    sizes_url = f'?size[70__{size}]=70__{size}'
-    
+    # Forming Size Link
 
     for i in range(0, last_page):
         if many_pages:
-            search_url = f"{url}?page={page_num}{sizes_url}"
+            search_url = f"{url}?page={page_num}&{sizes_url}"
         else:
-            search_url = f"{url}{sizes_url}"
+            search_url = f"{url}?{sizes_url}"
 
         uClient = uReq(search_url)
 

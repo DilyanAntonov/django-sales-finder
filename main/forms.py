@@ -1,7 +1,12 @@
-from django.forms import ModelForm
+from django import forms
 from .models import Search
 
-class SearchForm(ModelForm):
+class SearchForm(forms.ModelForm):
     class Meta:
         model = Search
-        fields = '__all__'
+        fields = ('url', 'size')
+
+        widgets = {
+            'url': forms.TextInput(attrs={'class':'form-control'}),
+            'size': forms.Select(attrs={'class':'form-control'})
+        }
