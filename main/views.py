@@ -23,10 +23,13 @@ def home(request):
 def search(request):
     Item.objects.all().delete()
 
-    url = model_to_dict(Search.objects.filter()[0])['url']
+    # url = model_to_dict(Search.objects.filter()[0])['url']
+    sex = model_to_dict(Search.objects.filter()[0])['sex']
     size = model_to_dict(Search.objects.filter()[0])['size']
+    brand = model_to_dict(Search.objects.filter()[0])['brand']
+    clothes_type = model_to_dict(Search.objects.filter()[0])['clothes_type']
    
-    all_items = FashionDaysScraper(url, size)
+    all_items = FashionDaysScraper(sex, size, brand, clothes_type)
 
     if all_items == False:
         return render(request, 'main/notfound.html')
@@ -43,11 +46,10 @@ def search(request):
 
         product.save()
 
-    context = {
-        'items': Item.objects.all()
-    }
 
-    
+    context = {
+        'items': Item.objects.order_by('disc_price').all()
+    }
 
     return render(request, 'main/search-results.html', context)
 

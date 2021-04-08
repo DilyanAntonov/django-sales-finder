@@ -3,14 +3,19 @@ from bs4 import BeautifulSoup as soup
 
 import json
 
-def FashionDaysScraper(url, size):
+def FashionDaysScraper(sex, size, brand, clothes_type):
     all_items = []
     page_num = 1
     last_page = 1
 
+    base_url = f'https://www.fashiondays.bg/g/{sex}-{brand}/{clothes_type}'
     sizes_url = f'size[70__{size}]=70__{size}'
 
-    uClient = uReq(f'{url}?{sizes_url}')
+    joined_url = f'{base_url}?{sizes_url}'
+
+    print(f'{joined_url}')
+
+    uClient = uReq(joined_url)
 
     many_pages = False
 
@@ -35,9 +40,9 @@ def FashionDaysScraper(url, size):
 
     for i in range(0, last_page):
         if many_pages:
-            search_url = f"{url}?page={page_num}&{sizes_url}"
+            search_url = f"{base_url}?page={page_num}&{sizes_url}"
         else:
-            search_url = f"{url}?{sizes_url}"
+            search_url = joined_url
 
         uClient = uReq(search_url)
 
@@ -65,8 +70,9 @@ def FashionDaysScraper(url, size):
                                   'brand': brand,
                                   'link': link,
                                   'pic': picture,
-                                  'disc_price': f"{discount_price}.{discount_cents}",
-                                  'org_price': f"{original_price}.{original_cents}"})
+                                  'disc_price': float(f"{discount_price}.{discount_cents}"),
+                                  'org_price': float(f"{original_price}.{original_cents}")
+                                })
         page_num += 1
 
     return all_items
