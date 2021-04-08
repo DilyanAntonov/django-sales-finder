@@ -7,7 +7,7 @@ import json
 
 
 def home(request):
-    form = SearchForm()
+    form = SearchForm(use_required_attribute=False)
     Search.objects.all().delete()
 
     if request.method == 'POST':

@@ -13,8 +13,6 @@ def FashionDaysScraper(sex, size, brand, clothes_type):
 
     joined_url = f'{base_url}?{sizes_url}'
 
-    print(f'{joined_url}')
-
     uClient = uReq(joined_url)
 
     many_pages = False
