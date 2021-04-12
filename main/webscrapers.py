@@ -1,5 +1,6 @@
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
+import regex
 import json
 
 def FashionDaysScraper(sex, size, brand, clothes_type):
@@ -19,18 +20,15 @@ def FashionDaysScraper(sex, size, brand, clothes_type):
     elif clothes_type == "Jackets":
         clothes_type = '%D0%94%D1%80%D0%B5%D1%85%D0%B8-%D0%AF%D0%BA%D0%B5%D1%82%D0%B0'
     
-    
     all_items = []
     page_num = 1
     last_page = 1
 
     base_url = f'https://www.fashiondays.bg/g/{sex}-{brand}/{clothes_type}'
     sizes_url = f'size[70__{size}]=70__{size}'
-
     joined_url = f'{base_url}?{sizes_url}'
 
     uClient = uReq(joined_url)
-
     many_pages = False
 
     # Check if page is not found
@@ -58,17 +56,15 @@ def FashionDaysScraper(sex, size, brand, clothes_type):
             search_url = joined_url
 
         uClient = uReq(search_url)
-
         page_html = uClient.read()
         page_soup = soup(page_html, "html.parser")
             
         containers = page_soup.findAll("a", {"class":"campaign-item"})
-        container = containers[0]
 
         for container in containers:
             original_price_container = container.findAll("span", {"class":"no-discount"})
+
             if (len(original_price_container) > 0):
-                brand = container.findAll("span", {"class":"brand-name"})[0].text
                 link = container["href"]
 
                 original_price = original_price_container[0].text[:-6]
@@ -79,14 +75,13 @@ def FashionDaysScraper(sex, size, brand, clothes_type):
                 
                 picture = container.find("img", {"class":"lazy"})["data-original"]
 
-                all_items.append({'brand': brand,
+                all_items.append({'brand': brand.upper(),
                                   'link': link,
                                   'pic': picture,
                                   'disc_price': float(f"{discount_price}.{discount_cents}"),
                                   'org_price': float(f"{original_price}.{original_cents}")
                                 })
         page_num += 1
-
     return all_items
 
 
@@ -117,25 +112,84 @@ def RemixWebScraper(sex, size, brand, clothes_type):
     url = f'https://remixshop.com/bg/{sex}-clothes/{clothes_type}?brand={brand}&size={size}&new=1&promo=2-20,20-40,40-60,60-75,75-100'
 
     uClient = uReq(url)
-
     page_html = uClient.read()
     page_soup = soup(page_html, "html.parser")
 
     containers = page_soup.findAll("div", {"class":"product-box"})
 
     for container in containers:
-        brand = container.find("a", {"class":"product-brand"}).text.strip()
+        # brand = container.find("a", {"class":"product-brand"}).text.strip().upper()
         link = container.find("a", {"class":"product-photos"})["href"]
 
         original_price = container.find("span", {"class":"old-price"}).text.strip()[:-4]
         discount_price = container.find("span", {"class":"new-price"}).text.strip()[:-4]
         picture = container.find("img", {"class":"img-fluid"})["src"]
         
-        all_items.append({'brand': brand,
+        all_items.append({'brand': brand.upper(),
                     'link': link,
                     'pic': picture,
                     'disc_price': float(discount_price.replace(",",".")),
-                    'org_price': float(original_price.replace(",",".")),
+                    'org_price': float(original_price.replace(",","."))
                 })
+    return all_items
+
+
+def GlamiWebScraper(sex, size, brand, clothes_type):
+
+    # Setting URL Codes
+    if sex == "Women":
+        sex ="damski"
+        if clothes_type == "T-shirts":
+            clothes_type = "teniski/kusi-rakavi"
+        elif clothes_type == "Tops":
+            clothes_type = 'teniski/dlgi-rkavi'
+        elif clothes_type == "Hoodies":
+            clothes_type = 'suitsrti'
+        elif clothes_type == "Jackets":
+            clothes_type = "iaketa-i-palta"
+
+    if sex == "Man":
+        if clothes_type == "T-shirts":
+            clothes_type = "blyzi-teniski-i-flanelki/kusi-rakavi"
+            sex = 'muzki'
+        elif clothes_type == "Tops":
+            clothes_type = 'blyzi-teniski-i-flanelki/dlgi-rkavi'
+            sex = 'muzki'
+        elif clothes_type == "Hoodies":
+            clothes_type = 'suitsrti'
+            sex = 'mzki'
+        elif clothes_type == "Jackets":
+            clothes_type = "aketa-i-palta"
+            sex = 'mzki'
+
+    if size == "2XL":
+        size = "xxl"
+
+    all_items = []
+
+    uClient = uReq(f"https://www.glami.bg/{brand}/{sex}-{clothes_type}/aboutyou-bg/modivo-bg/nad-10-procenta/{size}")
+
+    page_html = uClient.read()
+    page_soup = soup(page_html, "html.parser")
+
+    containers = page_soup.findAll("a", {"class":"needsclick tr-item-link j-track-ec"})
+
+    for container in containers:
+        link = container['href']
+
+        try:
+            picture = container.find("img")["data-src"]
+        except:
+            picture = container.find("img")["src"]
+
+        discount_price = container.find("span", {"class":"item-price__new"}).text[:-3]
+        original_price = container.find("strike", {"class":"item__price__old"}).text[:-3]
+
+        all_items.append({'brand': brand.upper(),
+                'link': link,
+                'pic': picture,
+                'disc_price': float(discount_price.replace(",",".")),
+                'org_price': float(original_price.replace(",",".")),
+            })
     
     return all_items

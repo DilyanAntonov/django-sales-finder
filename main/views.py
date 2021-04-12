@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.forms.models import model_to_dict
 from .models import Item, Search
 from .forms import SearchForm
-from .webscrapers import FashionDaysScraper, RemixWebScraper
+from .webscrapers import FashionDaysScraper, RemixWebScraper, GlamiWebScraper
 import json
 
 
@@ -15,7 +15,6 @@ def home(request):
         if form.is_valid():
             form.save()
             return redirect('search')
-
 
     context = {'form': form}
     return render(request, 'main/home.html', context)
@@ -32,6 +31,7 @@ def search(request):
    
     all_items += FashionDaysScraper(sex, size, brand, clothes_type)
     all_items += RemixWebScraper(sex, size, brand, clothes_type)
+    all_items += GlamiWebScraper(sex, size, brand, clothes_type)
 
     if all_items == False:
         return render(request, 'main/notfound.html')
@@ -46,7 +46,6 @@ def search(request):
         product.org_price = item['org_price']
 
         product.save()
-
 
     context = {
         'items': Item.objects.order_by('disc_price').all()
