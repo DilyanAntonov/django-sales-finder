@@ -11,7 +11,6 @@ SIZE_CHOICES = [('S', 's'),
 SEX_CHOICES = [('Man', 'МЪЖЕ'),
                ('Women', 'ЖЕНИ')]
 
-# Using the URL codes
 CHOTLES_TYPE = [('T-shirts', 'Тениски'),
               ('Hoodies', 'Суитшърти'),
               ('Tops', 'Блузи'),
@@ -19,6 +18,7 @@ CHOTLES_TYPE = [('T-shirts', 'Тениски'),
 
 BRANDS_CHOICES = [('superdry', 'Superdry'),
                   ('diesel', 'Diesel'),
+                  ('adidas', 'Adidas'),
                   ('napapijri', 'Napapijri')]
 
 class Search(models.Model):

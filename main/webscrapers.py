@@ -3,23 +3,29 @@ from bs4 import BeautifulSoup as soup
 import regex
 import json
 
+
 def FashionDaysScraper(sex, size, brand, clothes_type):
 
     # Setting URL Codes
-    if sex == "Man":
+    if sex == 'Man':
         sex = '%D0%9C%D1%8A%D0%B6%D0%B5'
-    elif sex == "Women":
-        sex ="%D0%96%D0%B5%D0%BD%D0%B8"
+    elif sex == 'Women':
+        sex ='%D0%96%D0%B5%D0%BD%D0%B8'
 
-    if clothes_type == "T-shirts":
+    if clothes_type == 'T-shirts':
         clothes_type = '%D0%94%D1%80%D0%B5%D1%85%D0%B8-%D0%A2%D0%95%D0%9D%D0%98%D0%A1%D0%9A%D0%98'
-    elif clothes_type == "Hoodies":
+    elif clothes_type == 'Hoodies':
         clothes_type = '%D0%94%D1%80%D0%B5%D1%85%D0%B8-%D0%A1%D1%83%D0%B8%D1%82%D1%88%D1%8A%D1%80%D1%82%D0%B8_%D1%81_%D0%BA%D0%B0%D1%87%D1%83%D0%BB%D0%BA%D0%B0'
-    elif clothes_type == "Tops":
+    elif clothes_type == 'Tops':
         clothes_type = '%D0%94%D1%80%D0%B5%D1%85%D0%B8-%D0%91%D0%BB%D1%83%D0%B7%D0%B8'
-    elif clothes_type == "Jackets":
+    elif clothes_type == 'Jackets':
         clothes_type = '%D0%94%D1%80%D0%B5%D1%85%D0%B8-%D0%AF%D0%BA%D0%B5%D1%82%D0%B0'
     
+    org_brand = brand
+
+    if brand == 'adidas':
+        brand = 'adidas_performance'
+
     all_items = []
     page_num = 1
     last_page = 1
@@ -46,7 +52,7 @@ def FashionDaysScraper(sex, size, brand, clothes_type):
 
     if (items_count>90):
         many_pages = True
-        last_page = int(page_soup.findAll("a", {"class":"paginationLink paginationLastPage"})[0].text)
+        last_page = int(page_soup.findAll('a', {"class":"paginationLink paginationLastPage"})[0].text)
 
     # Forming Size Link
     for i in range(0, last_page):
@@ -75,7 +81,7 @@ def FashionDaysScraper(sex, size, brand, clothes_type):
                 
                 picture = container.find("img", {"class":"lazy"})["data-original"]
 
-                all_items.append({'brand': brand.upper(),
+                all_items.append({'brand': org_brand.upper(),
                                   'link': link,
                                   'pic': picture,
                                   'disc_price': float(f"{discount_price}.{discount_cents}"),
@@ -98,10 +104,14 @@ def RemixWebScraper(sex, size, brand, clothes_type):
     else:
         clothes_type = clothes_type.lower()
 
+    org_brand = brand
+
     if brand == "superdry":
         brand = "22289"
     elif brand == "diesel":
         brand = "1116"
+    elif brand == "adidas":
+        brand = "853,5610,5611,5612,33091,76789,79057,80068,86550,89433,89484,90533"
     elif brand == "napapijri":
         brand = "3831"
 
@@ -118,14 +128,13 @@ def RemixWebScraper(sex, size, brand, clothes_type):
     containers = page_soup.findAll("div", {"class":"product-box"})
 
     for container in containers:
-        # brand = container.find("a", {"class":"product-brand"}).text.strip().upper()
         link = container.find("a", {"class":"product-photos"})["href"]
 
         original_price = container.find("span", {"class":"old-price"}).text.strip()[:-4]
         discount_price = container.find("span", {"class":"new-price"}).text.strip()[:-4]
         picture = container.find("img", {"class":"img-fluid"})["src"]
         
-        all_items.append({'brand': brand.upper(),
+        all_items.append({'brand': org_brand.upper(),
                     'link': link,
                     'pic': picture,
                     'disc_price': float(discount_price.replace(",",".")),
@@ -162,6 +171,11 @@ def GlamiWebScraper(sex, size, brand, clothes_type):
             clothes_type = "aketa-i-palta"
             sex = 'mzki'
 
+    org_brand = brand
+
+    if brand == 'adidas':
+        brand = 'adidas/adidas-originals/adidas-performance'
+
     if size == "2XL":
         size = "xxl"
 
@@ -185,11 +199,10 @@ def GlamiWebScraper(sex, size, brand, clothes_type):
         discount_price = container.find("span", {"class":"item-price__new"}).text[:-3]
         original_price = container.find("strike", {"class":"item__price__old"}).text[:-3]
 
-        all_items.append({'brand': brand.upper(),
+        all_items.append({'brand': org_brand.upper(),
                 'link': link,
                 'pic': picture,
                 'disc_price': float(discount_price.replace(",",".")),
                 'org_price': float(original_price.replace(",",".")),
             })
-    
     return all_items

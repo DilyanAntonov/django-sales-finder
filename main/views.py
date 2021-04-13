@@ -4,6 +4,7 @@ from .models import Item, Search
 from .forms import SearchForm
 from .webscrapers import FashionDaysScraper, RemixWebScraper, GlamiWebScraper
 import json
+import urllib
 
 
 def home(request):
@@ -29,11 +30,11 @@ def search(request):
     brand = model_to_dict(Search.objects.filter()[0])['brand']
     clothes_type = model_to_dict(Search.objects.filter()[0])['clothes_type']
    
-    all_items += FashionDaysScraper(sex, size, brand, clothes_type)
-    all_items += RemixWebScraper(sex, size, brand, clothes_type)
-    all_items += GlamiWebScraper(sex, size, brand, clothes_type)
-
-    if all_items == False:
+    try:
+        all_items += FashionDaysScraper(sex, size, brand, clothes_type)
+        all_items += RemixWebScraper(sex, size, brand, clothes_type)
+        all_items += GlamiWebScraper(sex, size, brand, clothes_type)
+    except:
         return render(request, 'main/notfound.html')
 
     for item in all_items:
@@ -51,5 +52,8 @@ def search(request):
         'items': Item.objects.order_by('disc_price').all()
     }
 
+
     return render(request, 'main/search-results.html', context)
+
+        
 
