@@ -1,14 +1,14 @@
 {% extends "main/base.html" %}
 
 {% block content %}
-    <div class="form-center">
+    <div class="form-center text-light text-center">
         <div class="form-group">
             <form action="" method="POST" class='form-group'>
                 {% csrf_token %}
-                <div class='input-group mb-3'></div>
+                <div class='input-group'></div>
                     {{ form }}
                 </div>
-                <button type="submit", class="btn btn-success">Search</button>
+                <button type="submit", class="btn btn-success" style="margin-top: 20px;">Search</button>
             </form>
         </div>
     </div>
