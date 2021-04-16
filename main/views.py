@@ -24,19 +24,50 @@ def search(request):
     Item.objects.all().delete()
 
     all_items = []
+    fashiondays_items = []
+    remix_items = []
+    glami_items = []
+    sportdepot_items =[]
 
     sex = model_to_dict(Search.objects.filter()[0])['sex']
     size = model_to_dict(Search.objects.filter()[0])['size']
     brand = model_to_dict(Search.objects.filter()[0])['brand']
     clothes_type = model_to_dict(Search.objects.filter()[0])['clothes_type']
-   
+
     try:
-        all_items += FashionDaysScraper(sex, size, brand, clothes_type)
-        all_items += RemixWebScraper(sex, size, brand, clothes_type)
-        all_items += GlamiWebScraper(sex, size, brand, clothes_type)
-        all_items += SportDepotWebScraper(sex, size, brand, clothes_type)
+        fashiondays_items = FashionDaysScraper(sex, size, brand, clothes_type)
     except:
-        return render(request, 'main/notfound.html')
+        pass
+
+    try:
+        remix_items = RemixWebScraper(sex, size, brand, clothes_type)
+    except:
+        pass
+
+    try:
+        glami_items = GlamiWebScraper(sex, size, brand, clothes_type)
+    except:
+        pass
+
+    try:
+        sportdepot_items = SportDepotWebScraper(sex, size, brand, clothes_type)
+    except:
+        pass
+
+    print(len(fashiondays_items))
+    print(len(remix_items))
+    print(len(glami_items))
+    print(len(sportdepot_items))
+    
+    if len(fashiondays_items) > 0:
+        all_items += fashiondays_items
+    if len(remix_items) > 0:
+        all_items += remix_items
+    if len(glami_items) > 0:
+        all_items += glami_items  
+    if len(sportdepot_items) > 0: 
+        all_items += sportdepot_items
+
 
     for item in all_items:
         product = Item()

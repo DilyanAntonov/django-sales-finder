@@ -174,9 +174,11 @@ def GlamiWebScraper(sex, size, brand, clothes_type):
 
     if size == "2XL":
         size = "xxl"
+    if size == "3XL":
+        return []
 
     uClient = uReq(f"https://www.glami.bg/{brand}/{sex}-{clothes_type}/aboutyou-bg/modivo-bg/nad-10-procenta/{size}")
-
+    
     page_html = uClient.read()
     page_soup = soup(page_html, "html.parser")
 
