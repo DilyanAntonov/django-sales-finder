@@ -1,10 +1,11 @@
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
-import regex
 import json
 
 
 def FashionDaysScraper(sex, size, brand, clothes_type):
+    all_items = []
+    org_brand = brand
 
     # Setting URL Codes
     if sex == 'Man':
@@ -20,13 +21,10 @@ def FashionDaysScraper(sex, size, brand, clothes_type):
         clothes_type = '%D0%94%D1%80%D0%B5%D1%85%D0%B8-%D0%91%D0%BB%D1%83%D0%B7%D0%B8'
     elif clothes_type == 'Jackets':
         clothes_type = '%D0%94%D1%80%D0%B5%D1%85%D0%B8-%D0%AF%D0%BA%D0%B5%D1%82%D0%B0'
-    
-    org_brand = brand
 
     if brand == 'adidas':
         brand = 'adidas_performance'
 
-    all_items = []
     page_num = 1
     last_page = 1
 
@@ -92,6 +90,8 @@ def FashionDaysScraper(sex, size, brand, clothes_type):
 
 
 def RemixWebScraper(sex, size, brand, clothes_type):
+    all_items = []
+    org_brand = brand
 
     # Setting URL Codes
     if sex == "Man":
@@ -104,8 +104,6 @@ def RemixWebScraper(sex, size, brand, clothes_type):
     else:
         clothes_type = clothes_type.lower()
 
-    org_brand = brand
-
     if brand == "superdry":
         brand = "22289"
     elif brand == "diesel":
@@ -116,8 +114,6 @@ def RemixWebScraper(sex, size, brand, clothes_type):
         brand = "3831"
 
     size = size.upper()
-
-    all_items = []
 
     url = f'https://remixshop.com/bg/{sex}-clothes/{clothes_type}?brand={brand}&size={size}&new=1&promo=2-20,20-40,40-60,60-75,75-100'
 
@@ -144,6 +140,8 @@ def RemixWebScraper(sex, size, brand, clothes_type):
 
 
 def GlamiWebScraper(sex, size, brand, clothes_type):
+    all_items = []
+    org_brand = brand
 
     # Setting URL Codes
     if sex == "Women":
@@ -171,15 +169,11 @@ def GlamiWebScraper(sex, size, brand, clothes_type):
             clothes_type = "aketa-i-palta"
             sex = 'mzki'
 
-    org_brand = brand
-
     if brand == 'adidas':
         brand = 'adidas/adidas-originals/adidas-performance'
 
     if size == "2XL":
         size = "xxl"
-
-    all_items = []
 
     uClient = uReq(f"https://www.glami.bg/{brand}/{sex}-{clothes_type}/aboutyou-bg/modivo-bg/nad-10-procenta/{size}")
 
@@ -206,3 +200,66 @@ def GlamiWebScraper(sex, size, brand, clothes_type):
                 'org_price': float(original_price.replace(",",".")),
             })
     return all_items
+
+
+def SportDepotWebScraper(sex, size, brand, clothes_type):
+    all_items = []
+    org_brand = brand
+
+    # Setting URL Codes
+    if sex == "Man":
+        sex = 'muje'
+    elif sex == "Women":
+        sex ="jeni"
+
+    if clothes_type == 'T-shirts':
+        clothes_type == 'teniski_i_potnici-2_35_103'
+    elif clothes_type == 'Hoodies':
+        clothes_type = 'suitsharti_i_gornishta-2_35_102'
+    elif clothes_type == 'Tops':
+        clothes_type == 'bluzi-2_35_1'
+    elif clothes_type == 'Jackets':
+        clothes_type == 'yaketa-2_35_6'
+
+    if brand == 'adidas':
+        brand = 'adidas?promotion=1&brandId=7'
+
+    if size == 'S':
+        size = '104'
+    elif size == 'M':
+        size = '103'
+    elif size == 'L':
+        size = '107'
+    elif size == 'XL':
+        size = '105'
+    elif size == '2XL':
+        size = '109'
+    elif size == '3XL':
+        size = '124'
+
+    url = f"https://www.sportdepot.bg/{sex}-obleklo/{clothes_type}/{brand}&size={size}&orderBy=default&showBy=200"
+
+    uClient = uReq(url)
+    page_html = uClient.read()
+    page_soup = soup(page_html, "html.parser")
+
+    containers = page_soup.findAll("div", {"class":"col-6 col-sm-4 col-md-3 col-lg-3"})
+
+    for container in containers:
+        link_raw = container.find('a', {"class":"image"})['href']
+        link = f"https://www.sportdepot.bg{link_raw}"
+        
+        picture_raw = container.find('a', {"class":"image"})
+        picture = picture_raw.find('img')['data-src']
+        
+        original_price = container.find('span', {"class":"old"}).text[:-5]
+        discount_price = container.find('span', {"class":"current"}).text[:-5]
+
+        all_items.append({'brand': org_brand.upper(),
+        'link': link,
+        'pic': picture,
+        'disc_price': float(discount_price.replace(",",".")),
+        'org_price': float(original_price.replace(",",".")),
+        })
+    return all_items
+

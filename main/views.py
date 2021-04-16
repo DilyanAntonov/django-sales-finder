@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.forms.models import model_to_dict
 from .models import Item, Search
 from .forms import SearchForm
-from .webscrapers import FashionDaysScraper, RemixWebScraper, GlamiWebScraper
+from .webscrapers import FashionDaysScraper, RemixWebScraper, GlamiWebScraper, SportDepotWebScraper
 import json
 import urllib
 
@@ -34,6 +34,7 @@ def search(request):
         all_items += FashionDaysScraper(sex, size, brand, clothes_type)
         all_items += RemixWebScraper(sex, size, brand, clothes_type)
         all_items += GlamiWebScraper(sex, size, brand, clothes_type)
+        all_items += SportDepotWebScraper(sex, size, brand, clothes_type)
     except:
         return render(request, 'main/notfound.html')
 
