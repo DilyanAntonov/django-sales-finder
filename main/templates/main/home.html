@@ -1,15 +1,13 @@
 {% extends "main/base.html" %}
 
 {% block content %}
-    <div class="form-center text-light text-center">
-        <div class="form-group">
-            <form action="" method="POST" class='form-group'>
-                {% csrf_token %}
-                <div class='input-group'></div>
-                    {{ form }}
-                </div>
-                <button type="submit", class="btn btn-success" style="margin-top: 20px;">Search</button>
-            </form>
-        </div>
+<div class="row" style="margin-top: 10%; margin-right: 10%;">
+    <div class="column" style="margin-left: 20%">
+        <a href="clothes/"><img src="static/images/clothes.png" alt="clothes" width="400" height="400"></a>
     </div>
+    <div class="column" style="margin-left: 20%">
+        <a href="shoes/"><img src="static/images/shoes.png" alt="shoes" width="400" height="400"></a>
+    </div>
+
+</div>
 {% endblock content %}

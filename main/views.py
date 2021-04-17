@@ -1,27 +1,32 @@
 from django.shortcuts import render, redirect
 from django.forms.models import model_to_dict
-from .models import Item, Search
-from .forms import SearchForm
-from .webscrapers import FashionDaysScraper, RemixWebScraper, GlamiWebScraper, SportDepotWebScraper
+from .models import ClothesItem, ClothesSearch
+from .models import ShoesItem, ShoesSearch
+from .forms import ClothesSearchForm, ShoesSearchForm
+from .webscrapers import ClothesFashionDaysScraper, ClothesRemixWebScraper, ClothesGlamiWebScraper, ClothesSportDepotWebScraper
+from .webscrapers import ShoesSportDepotWebScraper, ShoesGlamiWebScraper
 import json
 import urllib
 
 
 def home(request):
-    form = SearchForm(use_required_attribute=False)
-    Search.objects.all().delete()
+    return render(request, 'main/home.html')
+
+def clothes(request):
+    form = ClothesSearchForm(use_required_attribute=False)
+    ClothesSearch.objects.all().delete()
 
     if request.method == 'POST':
-        form = SearchForm(request.POST)
+        form = ClothesSearchForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('search')
+            return redirect('clothes_search')
 
     context = {'form': form}
-    return render(request, 'main/home.html', context)
+    return render(request, 'main/clothes/clothes-home.html', context)
  
-def search(request):
-    Item.objects.all().delete()
+def clothes_search(request):
+    ClothesItem.objects.all().delete()
 
     all_items = []
     fashiondays_items = []
@@ -29,28 +34,28 @@ def search(request):
     glami_items = []
     sportdepot_items =[]
 
-    sex = model_to_dict(Search.objects.filter()[0])['sex']
-    size = model_to_dict(Search.objects.filter()[0])['size']
-    brand = model_to_dict(Search.objects.filter()[0])['brand']
-    clothes_type = model_to_dict(Search.objects.filter()[0])['clothes_type']
+    sex = model_to_dict(ClothesSearch.objects.filter()[0])['sex']
+    size = model_to_dict(ClothesSearch.objects.filter()[0])['size']
+    brand = model_to_dict(ClothesSearch.objects.filter()[0])['brand']
+    clothes_type = model_to_dict(ClothesSearch.objects.filter()[0])['clothes_type']
 
     try:
-        fashiondays_items = FashionDaysScraper(sex, size, brand, clothes_type)
+        fashiondays_items = ClothesFashionDaysScraper(sex, size, brand, clothes_type)
     except:
         pass
 
     try:
-        remix_items = RemixWebScraper(sex, size, brand, clothes_type)
+        remix_items = ClothesRemixWebScraper(sex, size, brand, clothes_type)
     except:
         pass
 
     try:
-        glami_items = GlamiWebScraper(sex, size, brand, clothes_type)
+        glami_items = ClothesGlamiWebScraper(sex, size, brand, clothes_type)
     except:
         pass
 
     try:
-        sportdepot_items = SportDepotWebScraper(sex, size, brand, clothes_type)
+        sportdepot_items = ClothesSportDepotWebScraper(sex, size, brand, clothes_type)
     except:
         pass
 
@@ -68,24 +73,84 @@ def search(request):
     if len(sportdepot_items) > 0: 
         all_items += sportdepot_items
 
+    if all_items == []:
+        return render(request, 'main/notfound.html')
+    else:
+        for item in all_items:
+            product = ClothesItem()
 
-    for item in all_items:
-        product = Item()
+            product.brand = item['brand']
+            product.link = item['link']
+            product.pic = item['pic']
+            product.disc_price = item['disc_price']
+            product.org_price = item['org_price']
 
-        product.brand = item['brand']
-        product.link = item['link']
-        product.pic = item['pic']
-        product.disc_price = item['disc_price']
-        product.org_price = item['org_price']
+            product.save()
 
-        product.save()
+        context = {
+            'items': ClothesItem.objects.order_by('disc_price').all()
+        }
 
-    context = {
-        'items': Item.objects.order_by('disc_price').all()
-    }
+        return render(request, 'main/clothes/clothes-search-results.html', context)
+
+def shoes(request):
+    form = ShoesSearchForm(use_required_attribute=False)
+    ShoesSearch.objects.all().delete()
+
+    if request.method == 'POST':
+        form = ShoesSearchForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('shoes_search')
+
+    context = {'form': form}
+    return render(request, 'main/shoes/shoes-home.html', context)
 
 
-    return render(request, 'main/search-results.html', context)
+def shoes_search(request):
+    ShoesItem.objects.all().delete()
 
-        
+    all_items = []
+    sportdepot_items = []
+    glami_items = []
 
+    sex = model_to_dict(ShoesSearch.objects.filter()[0])['sex']
+    size = model_to_dict(ShoesSearch.objects.filter()[0])['size']
+    brand = model_to_dict(ShoesSearch.objects.filter()[0])['brand']
+
+    try:
+        sportdepot_items = ShoesSportDepotWebScraper(sex, size, brand)
+    except:
+        pass
+    try:
+        glami_items = ShoesGlamiWebScraper(sex, size, brand)
+    except:
+        pass
+
+    print(len(sportdepot_items))
+    print(len(glami_items))
+     
+    if len(sportdepot_items) > 0: 
+        all_items += sportdepot_items
+    if len(glami_items) > 0:
+        all_items += glami_items
+
+    if all_items == []:
+        return render(request, 'main/notfound.html')
+    else:
+        for item in all_items:
+            product = ShoesItem()
+
+            product.brand = item['brand']
+            product.link = item['link']
+            product.pic = item['pic']
+            product.disc_price = item['disc_price']
+            product.org_price = item['org_price']
+
+            product.save()
+
+        context = {
+            'items': ShoesItem.objects.order_by('disc_price').all()
+        }
+
+        return render(request, 'main/shoes/shoes-search-results.html', context)

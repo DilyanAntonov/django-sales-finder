@@ -1,36 +1,38 @@
 from django.db import models
 from django.utils.encoding import force_bytes
 
-SIZE_CHOICES = [('S', 's'),
-                ('M', 'm'),
-                ('L', 'l'),
-                ('XL', 'xl'), 
-                ('2XL', '2xl'), 
-                ('3XL', '3xl')]
-
 SEX_CHOICES = [('Man', 'МЪЖЕ'),
                ('Women', 'ЖЕНИ')]
 
+# Clothes Form Fields
+CLOTHES_SIZE_CHOICES = [('S', 's'),
+                        ('M', 'm'),
+                        ('L', 'l'),
+                        ('XL', 'xl'), 
+                        ('2XL', '2xl'), 
+                        ('3XL', '3xl')]
+
+CLOTHES_BRANDS_CHOICES = [('superdry', 'Superdry'),
+                          ('diesel', 'Diesel'),
+                          ('adidas', 'Adidas'),
+                          ('napapijri', 'Napapijri')]
+
 CHOTLES_TYPE = [('T-shirts', 'Тениски'),
-              ('Hoodies', 'Суитшърти'),
-              ('Tops', 'Блузи'),
-              ('Jackets', 'Якета')]
+                ('Hoodies', 'Суитшърти'),
+                ('Tops', 'Блузи'),
+                ('Jackets', 'Якета')]
 
-BRANDS_CHOICES = [('superdry', 'Superdry'),
-                  ('diesel', 'Diesel'),
-                  ('adidas', 'Adidas'),
-                  ('napapijri', 'Napapijri')]
 
-class Search(models.Model):
-    sex = models.CharField(max_length=50, choices=SEX_CHOICES, default=SIZE_CHOICES[0][0])
-    size = models.CharField(max_length=50, choices=SIZE_CHOICES, default=SIZE_CHOICES[0][0])
-    brand = models.CharField(max_length=50, choices=BRANDS_CHOICES, default=BRANDS_CHOICES[0][0])
+class ClothesSearch(models.Model):
+    sex = models.CharField(max_length=50, choices=SEX_CHOICES, default=SEX_CHOICES[0][0])
+    size = models.CharField(max_length=50, choices=CLOTHES_SIZE_CHOICES, default=CLOTHES_SIZE_CHOICES[0][0])
+    brand = models.CharField(max_length=50, choices=CLOTHES_BRANDS_CHOICES, default=CLOTHES_BRANDS_CHOICES[0][0])
     clothes_type = models.CharField(max_length=500, choices=CHOTLES_TYPE, default=CHOTLES_TYPE[0][0])
 
     def __str__(self):
         return self.brand
 
-class Item(models.Model):
+class ClothesItem(models.Model):
     brand = models.CharField(max_length=50)
     link = models.CharField(max_length=300)
     pic = models.CharField(max_length=300)
@@ -38,4 +40,31 @@ class Item(models.Model):
     org_price = models.FloatField(max_length=10)
 
     def __str__(self):
-        return self.title
+        return self.brand
+
+
+# Shoes Form Fields
+SHOES_SIZE_CHOICES = [('45', '45'),
+                           ('46', '46'),
+                           ('47', '47')]
+
+SHOES_BRANDS_CHOICES = [('adidas', 'Adidas'),
+                        ('nike', 'Nike')]
+                        
+class ShoesSearch(models.Model):
+    sex = models.CharField(max_length=50, choices=SEX_CHOICES, default=SEX_CHOICES[0][0])
+    brand = models.CharField(max_length=50, choices=SHOES_BRANDS_CHOICES, default=SHOES_BRANDS_CHOICES[0][0])
+    size = models.CharField(max_length=50, choices=SHOES_SIZE_CHOICES, default=SHOES_SIZE_CHOICES[0][0])
+
+    def __str__(self):
+        return self.brand
+
+class ShoesItem(models.Model):
+    brand = models.CharField(max_length=50)
+    link = models.CharField(max_length=300)
+    pic = models.CharField(max_length=300)
+    disc_price = models.FloatField(max_length=10)
+    org_price = models.FloatField(max_length=10)
+
+    def __str__(self):
+        return self.brand

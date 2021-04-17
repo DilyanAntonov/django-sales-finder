@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup as soup
 import json
 
 
-def FashionDaysScraper(sex, size, brand, clothes_type):
+def ClothesFashionDaysScraper(sex, size, brand, clothes_type):
     all_items = []
     org_brand = brand
 
@@ -89,7 +89,7 @@ def FashionDaysScraper(sex, size, brand, clothes_type):
     return all_items
 
 
-def RemixWebScraper(sex, size, brand, clothes_type):
+def ClothesRemixWebScraper(sex, size, brand, clothes_type):
     all_items = []
     org_brand = brand
 
@@ -139,7 +139,7 @@ def RemixWebScraper(sex, size, brand, clothes_type):
     return all_items
 
 
-def GlamiWebScraper(sex, size, brand, clothes_type):
+def ClothesGlamiWebScraper(sex, size, brand, clothes_type):
     all_items = []
     org_brand = brand
 
@@ -203,8 +203,7 @@ def GlamiWebScraper(sex, size, brand, clothes_type):
             })
     return all_items
 
-
-def SportDepotWebScraper(sex, size, brand, clothes_type):
+def ClothesSportDepotWebScraper(sex, size, brand):
     all_items = []
     org_brand = brand
 
@@ -265,3 +264,101 @@ def SportDepotWebScraper(sex, size, brand, clothes_type):
         })
     return all_items
 
+
+def ShoesGlamiWebScraper(sex, size, brand):
+    all_items = []
+    org_brand = brand
+
+    # Setting URL Codes
+    if sex == 'Women':
+        sex ='damski'
+    elif sex == 'Man':
+        sex = 'mzki'
+
+    if brand == 'adidas':
+        brand = 'adidas/adidas-consortium/adidas-originals/adidas-performance'
+    if brand == 'nike':
+        brand = 'nike/nike-performance/nike-sportswear'
+
+    if size == '45':
+        size = 'eu-45/eu-45-1_3/eu-45.5/'
+    if size == '46':
+        size = 'eu-46/eu-46-2_3/eu-46.5/'
+    if size == '47':
+        size = 'eu-47/eu-47-1_3/eu-47-2_3/eu-47.5/'
+
+    uClient = uReq(f"https://www.glami.bg/{brand}/{sex}-obuvki/aboutyou-bg/answear-bg/bibloo-bg/footshop-bg/gomez-bg/obuvki-bg/remixshop-com/nad-10-procenta/{size}?o=2")
+    page_html = uClient.read()
+    page_soup = soup(page_html, "html.parser")
+
+    containers = page_soup.findAll("a", {"class":"needsclick tr-item-link j-track-ec"})
+
+    for container in containers:
+        link = container['href']
+
+        try:
+            picture = container.find("img")["data-src"]
+        except:
+            picture = container.find("img")["src"]
+
+        try:
+            discount_price = container.find("span", {"class":"item-price__new"}).text[:-3]
+            original_price = container.find("strike", {"class":"item__price__old"}).text[:-3]
+        except:
+            pass
+
+        all_items.append({'brand': org_brand.upper(),
+                'link': link,
+                'pic': picture,
+                'disc_price': float(discount_price.replace(",",".")),
+                'org_price': float(original_price.replace(",",".")),
+            })
+    return all_items
+
+def ShoesSportDepotWebScraper(sex, size, brand):
+    all_items = []
+    org_brand = brand
+
+    # Setting URL Codes
+    if sex == "Man":
+        sex = 'muje'
+    elif sex == "Women":
+        sex ="jeni"
+
+    if brand == 'adidas':
+        brand = 'adidas?promotion=1&brandId=7'
+    elif brand == 'nike':
+        brand = 'nike?promotion=1&brandId=136'
+
+    if size == '45':
+        size = '37.64'
+    elif size == '46':
+        size = '38.302.65'
+    elif size == '47':
+        size = '80.69.95'
+
+    url = f"https://www.sportdepot.bg/{sex}-obuvki/{brand}&size={size}&orderBy=default&showBy=200"
+
+    uClient = uReq(url)
+    page_html = uClient.read()
+    page_soup = soup(page_html, "html.parser")
+
+    containers = page_soup.findAll("div", {"class":"col-6 col-sm-4 col-md-3 col-lg-3"})
+
+    for container in containers:
+        link_raw = container.find('a', {"class":"image"})['href']
+        link = f"https://www.sportdepot.bg{link_raw}"
+        
+        picture_raw = container.find('a', {"class":"image"})
+        picture = picture_raw.find('img')['data-src']
+        
+        original_price = container.find('span', {"class":"old"}).text[:-5]
+        discount_price = container.find('span', {"class":"current"}).text[:-5]
+
+        all_items.append({'brand': org_brand.upper(),
+        'link': link,
+        'pic': picture,
+        'disc_price': float(discount_price.replace(",",".")),
+        'org_price': float(original_price.replace(",",".")),
+        })
+    return all_items

@@ -1,0 +1,20 @@
+{% extends "main/base.html" %}
+
+<div class="container">
+    {% block content %}
+        <div class="row row-cols-auto grid-center">
+            {% for item in items %}
+                <div class="col">
+                    <div class="p-3 rounded border border-light" style="margin-top: 25px; background-color: #212529;">
+                        <div class="card-body text-center mx-auto" style="margin-bottom: -35px;">
+                            <a href="{{ item.link }}"><img class="rounded" src="{{ item.pic }}" width='300' height='450'/></a>
+                            <h4 class="text-light pt-2">{{ item.brand }}</h4>
+                            <p class="text-light h4">{{ item.disc_price }} лв</p>
+                            <p class="text-light"><del>{{ item.org_price }} лв</del></p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endblock content %}
+</div>

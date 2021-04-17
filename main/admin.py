@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Item, Search
+from .models import ClothesItem, ClothesSearch
 
-admin.site.register(Item)
-admin.site.register(Search)
+admin.site.register(ClothesItem)
+admin.site.register(ClothesSearch)

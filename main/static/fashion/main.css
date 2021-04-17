@@ -1,5 +1,5 @@
 .form-center {
-  margin-top: 5%;
+  margin-top: 10%;
   margin-left: 40%;
   margin-right: 40%;
 }
@@ -13,3 +13,12 @@
   margin-right: 5%;
 }
 
+.homecontainer {
+  width: 300px;
+  height: 100px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -150px; /* Half of width */
+  margin-top: -50px;    /* Half of height */
+}
