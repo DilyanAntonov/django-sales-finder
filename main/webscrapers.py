@@ -88,7 +88,6 @@ def ClothesFashionDaysScraper(sex, size, brand, clothes_type):
         page_num += 1
     return all_items
 
-
 def ClothesRemixWebScraper(sex, size, brand, clothes_type):
     all_items = []
     org_brand = brand
@@ -138,7 +137,6 @@ def ClothesRemixWebScraper(sex, size, brand, clothes_type):
                 })
     return all_items
 
-
 def ClothesGlamiWebScraper(sex, size, brand, clothes_type):
     all_items = []
     org_brand = brand
@@ -177,8 +175,7 @@ def ClothesGlamiWebScraper(sex, size, brand, clothes_type):
     if size == "3XL":
         return []
 
-    uClient = uReq(f"https://www.glami.bg/{brand}/{sex}-{clothes_type}/aboutyou-bg/modivo-bg/nad-10-procenta/{size}")
-    
+    uClient = uReq(f"https://www.glami.bg/{brand}/{sex}-{clothes_type}/aboutyou-bg/modivo-bg/answear-bg/nad-10-procenta/{size}")
     page_html = uClient.read()
     page_soup = soup(page_html, "html.parser")
 
@@ -203,7 +200,7 @@ def ClothesGlamiWebScraper(sex, size, brand, clothes_type):
             })
     return all_items
 
-def ClothesSportDepotWebScraper(sex, size, brand):
+def ClothesSportDepotWebScraper(sex, size, brand, clothes_type):
     all_items = []
     org_brand = brand
 
@@ -264,30 +261,50 @@ def ClothesSportDepotWebScraper(sex, size, brand):
         })
     return all_items
 
-
 def ShoesGlamiWebScraper(sex, size, brand):
     all_items = []
     org_brand = brand
 
     # Setting URL Codes
     if sex == 'Women':
-        sex ='damski'
+        sex ='jeni'
     elif sex == 'Man':
         sex = 'mzki'
 
     if brand == 'adidas':
         brand = 'adidas/adidas-consortium/adidas-originals/adidas-performance'
     if brand == 'nike':
-        brand = 'nike/nike-performance/nike-sportswear'
+        brand = 'air-jordan-nike/jordan/nike/nike-performance/nike-sportswear'
 
-    if size == '45':
-        size = 'eu-45/eu-45-1_3/eu-45.5/'
-    if size == '46':
-        size = 'eu-46/eu-46-2_3/eu-46.5/'
-    if size == '47':
+    if size == '36':
+        size = 'eu-36/eu-36-1_3/eu-36-2_3/eu-36.5/'
+    elif size == '37':
+        size = 'eu-37/eu-37-1_3/eu-37-2_3/eu-37.5/'
+    elif size == '38':
+        size = 'eu-38/eu-38-1_3/eu-38-2_3/eu-38.5/'
+    elif size == '39':
+        size = 'eu-39/eu-39-1_3/eu-39-2_3/eu-39.5/'
+    elif size == '40':
+        size = 'eu-40/eu-40-1_3/eu-40-2_3/eu-40.5/'
+    elif size == '41':
+        size = 'eu-41/eu-41-1_3/eu-41-2_3/eu-41.5/'
+    elif size == '42':
+        size = 'eu-42/eu-42-1_3/eu-42-2_3/eu-42.5/'
+    elif size == '43':
+        size = 'eu-43/eu-43-1_3/eu-43-2_3/eu-43.5/'
+    elif size == '44':
+        size = 'eu-44/eu-44-1_3/eu-44-2_3/eu-44.5/'
+    elif size == '45':
+        size = 'eu-45/eu-45-1_3/eu-45-2_3/eu-45.5/'
+    elif size == '46':
+        size = 'eu-46/eu-46-1_3/eu-46-2_3/eu-46.5/'
+    elif size == '47':
         size = 'eu-47/eu-47-1_3/eu-47-2_3/eu-47.5/'
+    elif size == '48':
+        size = 'eu-48/eu-48-1_3/eu-48-2_3/eu-48.5/'
 
     uClient = uReq(f"https://www.glami.bg/{brand}/{sex}-obuvki/aboutyou-bg/answear-bg/bibloo-bg/footshop-bg/gomez-bg/obuvki-bg/remixshop-com/nad-10-procenta/{size}?o=2")
+    # print(f"https://www.glami.bg/{brand}/{sex}-obuvki/aboutyou-bg/answear-bg/bibloo-bg/footshop-bg/gomez-bg/obuvki-bg/remixshop-com/nad-10-procenta/{size}?o=2")
     page_html = uClient.read()
     page_soup = soup(page_html, "html.parser")
 
@@ -328,20 +345,43 @@ def ShoesSportDepotWebScraper(sex, size, brand):
     if brand == 'adidas':
         brand = 'adidas?promotion=1&brandId=7'
     elif brand == 'nike':
-        brand = 'nike?promotion=1&brandId=136'
+        brand = 'nike,jordan?promotion=1&brandId=136.435'
 
-    if size == '45':
-        size = '37.64'
+    if size == '36':
+        size = '48.70'
+    elif size == '37':
+        size = '39.81.46'
+    elif size == '38':
+        size = '40.89.59.477'
+    elif size == '39':
+        size = '50.58.57.474'
+    elif size == '40':
+        size = '474.49.90.60'
+    elif size == '41':
+        size = '34.325.204.475'
+    elif size == '42':
+        size = '475.35.33.63'
+    elif size == '43':
+        size = '36.66.98.487'
+    elif size == '44':
+        size = '487.41.82.67'
+    elif size == '45':
+        size = '37.64.87.499'
     elif size == '46':
-        size = '38.302.65'
+        size = '499.38.302.65'
     elif size == '47':
         size = '80.69.95'
-
+    elif size == '48':
+        size = '72.92'
+    
     url = f"https://www.sportdepot.bg/{sex}-obuvki/{brand}&size={size}&orderBy=default&showBy=200"
-
     uClient = uReq(url)
     page_html = uClient.read()
     page_soup = soup(page_html, "html.parser")
+
+    none_found = page_soup.find('span', {'class':'page-result-count text-gray text-sm'}).text[:-21]
+    if int(none_found) > 300:
+        return []
 
     containers = page_soup.findAll("div", {"class":"col-6 col-sm-4 col-md-3 col-lg-3"})
 
@@ -356,9 +396,10 @@ def ShoesSportDepotWebScraper(sex, size, brand):
         discount_price = container.find('span', {"class":"current"}).text[:-5]
 
         all_items.append({'brand': org_brand.upper(),
-        'link': link,
-        'pic': picture,
-        'disc_price': float(discount_price.replace(",",".")),
-        'org_price': float(original_price.replace(",",".")),
-        })
+                            'link': link,
+                            'pic': picture,
+                            'disc_price': float(discount_price.replace(",",".")),
+                            'org_price': float(original_price.replace(",",".")),
+                            })
+
     return all_items

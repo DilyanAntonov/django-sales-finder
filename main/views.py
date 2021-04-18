@@ -122,18 +122,18 @@ def shoes_search(request):
         sportdepot_items = ShoesSportDepotWebScraper(sex, size, brand)
     except:
         pass
-    try:
-        glami_items = ShoesGlamiWebScraper(sex, size, brand)
-    except:
-        pass
+    # try:
+    #     glami_items = ShoesGlamiWebScraper(sex, size, brand)
+    # except:
+    #     pass
 
     print(len(sportdepot_items))
-    print(len(glami_items))
+    # print(len(glami_items))
      
     if len(sportdepot_items) > 0: 
         all_items += sportdepot_items
-    if len(glami_items) > 0:
-        all_items += glami_items
+    # if len(glami_items) > 0:
+    #     all_items += glami_items
 
     if all_items == []:
         return render(request, 'main/notfound.html')

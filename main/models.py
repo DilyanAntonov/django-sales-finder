@@ -44,9 +44,19 @@ class ClothesItem(models.Model):
 
 
 # Shoes Form Fields
-SHOES_SIZE_CHOICES = [('45', '45'),
-                           ('46', '46'),
-                           ('47', '47')]
+SHOES_SIZE_CHOICES = [('36', '36'), 
+                        ('37', '37'), 
+                        ('38', '38'), 
+                        ('39', '39'), 
+                        ('40', '40'), 
+                        ('41', '41'), 
+                        ('42', '42'), 
+                        ('43', '43'), 
+                        ('44', '44'), 
+                        ('45', '45'), 
+                        ('46', '46'),
+                        ('47', '47'),
+                        ('48', '48')]
 
 SHOES_BRANDS_CHOICES = [('adidas', 'Adidas'),
                         ('nike', 'Nike')]
@@ -54,7 +64,7 @@ SHOES_BRANDS_CHOICES = [('adidas', 'Adidas'),
 class ShoesSearch(models.Model):
     sex = models.CharField(max_length=50, choices=SEX_CHOICES, default=SEX_CHOICES[0][0])
     brand = models.CharField(max_length=50, choices=SHOES_BRANDS_CHOICES, default=SHOES_BRANDS_CHOICES[0][0])
-    size = models.CharField(max_length=50, choices=SHOES_SIZE_CHOICES, default=SHOES_SIZE_CHOICES[0][0])
+    size = models.CharField(max_length=50, choices=SHOES_SIZE_CHOICES, default=SHOES_SIZE_CHOICES[-3][0])
 
     def __str__(self):
         return self.brand
