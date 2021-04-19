@@ -1,6 +1,8 @@
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
 import json
+import math
+import re
 
 
 def ClothesFashionDaysScraper(sex, size, brand, clothes_type):
@@ -175,7 +177,7 @@ def ClothesGlamiWebScraper(sex, size, brand, clothes_type):
     if size == "3XL":
         return []
 
-    uClient = uReq(f"https://www.glami.bg/{brand}/{sex}-{clothes_type}/aboutyou-bg/modivo-bg/answear-bg/nad-10-procenta/{size}")
+    uClient = uReq(f"https://www.glami.bg/{brand}/{sex}-{clothes_type}/aboutyou-bg/answear-bg/bibloo-bg/fashiondays-bg/modivo-bg/nad-10-procenta/{size}")
     page_html = uClient.read()
     page_soup = soup(page_html, "html.parser")
 
@@ -267,14 +269,14 @@ def ShoesGlamiWebScraper(sex, size, brand):
 
     # Setting URL Codes
     if sex == 'Women':
-        sex ='jeni'
+        sex ='damski'
     elif sex == 'Man':
         sex = 'mzki'
 
     if brand == 'adidas':
         brand = 'adidas/adidas-consortium/adidas-originals/adidas-performance'
     if brand == 'nike':
-        brand = 'air-jordan-nike/jordan/nike/nike-performance/nike-sportswear'
+        brand = 'air-jordan-nike/nike/nike-performance/nike-sportswear'
 
     if size == '36':
         size = 'eu-36/eu-36-1_3/eu-36-2_3/eu-36.5/'
@@ -303,33 +305,43 @@ def ShoesGlamiWebScraper(sex, size, brand):
     elif size == '48':
         size = 'eu-48/eu-48-1_3/eu-48-2_3/eu-48.5/'
 
-    uClient = uReq(f"https://www.glami.bg/{brand}/{sex}-obuvki/aboutyou-bg/answear-bg/bibloo-bg/footshop-bg/gomez-bg/obuvki-bg/remixshop-com/nad-10-procenta/{size}?o=2")
-    # print(f"https://www.glami.bg/{brand}/{sex}-obuvki/aboutyou-bg/answear-bg/bibloo-bg/footshop-bg/gomez-bg/obuvki-bg/remixshop-com/nad-10-procenta/{size}?o=2")
+    url = f"https://www.glami.bg/{brand}/{sex}-obuvki/aboutyou-bg/bibloo-bg/footshop-bg/modivo-bg/obuvki-bg/remixshop-com/answear-bg/nad-10-procenta/{size}?o=2"
+    uClient = uReq(url)
     page_html = uClient.read()
     page_soup = soup(page_html, "html.parser")
 
-    containers = page_soup.findAll("a", {"class":"needsclick tr-item-link j-track-ec"})
+    # Finding the number of pages
+    items_num_text = page_soup.find("div", {"class","header__description"}).text[:-20]
+    items_num = int(re.findall("\d+", items_num_text)[0])
+    pages_num = math.ceil(items_num / 120)
+    
+    for page in range(1, pages_num+1):
+        url = f"https://www.glami.bg/{brand}/{sex}-obuvki/aboutyou-bg/bibloo-bg/footshop-bg/modivo-bg/obuvki-bg/remixshop-com/answear-bg/nad-10-procenta/{size}?p={page}&o=2"
+        uClient = uReq(url)
+        page_html = uClient.read()
+        page_soup = soup(page_html, "html.parser")
+        containers = page_soup.findAll("a", {"class":"needsclick tr-item-link j-track-ec"})
 
-    for container in containers:
-        link = container['href']
+        for container in containers:
+            link = container['href']
 
-        try:
-            picture = container.find("img")["data-src"]
-        except:
-            picture = container.find("img")["src"]
+            try:
+                picture = container.find("img")["data-src"]
+            except:
+                picture = container.find("img")["src"]
 
-        try:
-            discount_price = container.find("span", {"class":"item-price__new"}).text[:-3]
-            original_price = container.find("strike", {"class":"item__price__old"}).text[:-3]
-        except:
-            pass
+            try:
+                discount_price = container.find("span", {"class":"item-price__new"}).text[:-3]
+                original_price = container.find("strike", {"class":"item__price__old"}).text[:-3]
+            except:
+                pass
 
-        all_items.append({'brand': org_brand.upper(),
-                'link': link,
-                'pic': picture,
-                'disc_price': float(discount_price.replace(",",".")),
-                'org_price': float(original_price.replace(",",".")),
-            })
+            all_items.append({'brand': org_brand.upper(),
+                    'link': link,
+                    'pic': picture,
+                    'disc_price': float(discount_price.replace(",",".")),
+                    'org_price': float(original_price.replace(",",".")),
+                })
     return all_items
 
 def ShoesSportDepotWebScraper(sex, size, brand):
@@ -378,7 +390,6 @@ def ShoesSportDepotWebScraper(sex, size, brand):
     uClient = uReq(url)
     page_html = uClient.read()
     page_soup = soup(page_html, "html.parser")
-
     none_found = page_soup.find('span', {'class':'page-result-count text-gray text-sm'}).text[:-21]
     if int(none_found) > 300:
         return []

@@ -43,26 +43,18 @@ def clothes_search(request):
         fashiondays_items = ClothesFashionDaysScraper(sex, size, brand, clothes_type)
     except:
         pass
-
     try:
         remix_items = ClothesRemixWebScraper(sex, size, brand, clothes_type)
     except:
         pass
-
     try:
         glami_items = ClothesGlamiWebScraper(sex, size, brand, clothes_type)
     except:
         pass
-
     try:
         sportdepot_items = ClothesSportDepotWebScraper(sex, size, brand, clothes_type)
     except:
         pass
-
-    print(len(fashiondays_items))
-    print(len(remix_items))
-    print(len(glami_items))
-    print(len(sportdepot_items))
     
     if len(fashiondays_items) > 0:
         all_items += fashiondays_items
@@ -122,18 +114,15 @@ def shoes_search(request):
         sportdepot_items = ShoesSportDepotWebScraper(sex, size, brand)
     except:
         pass
-    # try:
-    #     glami_items = ShoesGlamiWebScraper(sex, size, brand)
-    # except:
-    #     pass
-
-    print(len(sportdepot_items))
-    # print(len(glami_items))
+    try:
+        glami_items = ShoesGlamiWebScraper(sex, size, brand)
+    except:
+        pass
      
     if len(sportdepot_items) > 0: 
         all_items += sportdepot_items
-    # if len(glami_items) > 0:
-    #     all_items += glami_items
+    if len(glami_items) > 0:
+        all_items += glami_items
 
     if all_items == []:
         return render(request, 'main/notfound.html')
