@@ -12,6 +12,9 @@ import urllib
 def home(request):
     return render(request, 'main/home.html')
 
+def about(request):
+    return render(request, 'main/about.html')
+
 def clothes(request):
     form = ClothesSearchForm(use_required_attribute=False)
     ClothesSearch.objects.all().delete()
