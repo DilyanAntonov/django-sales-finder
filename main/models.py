@@ -5,12 +5,12 @@ SEX_CHOICES = [('Man', 'МЪЖЕ'),
                ('Women', 'ЖЕНИ')]
 
 # Clothes Form Fields
-CLOTHES_SIZE_CHOICES = [('S', 's'),
-                        ('M', 'm'),
-                        ('L', 'l'),
-                        ('XL', 'xl'), 
-                        ('2XL', '2xl'), 
-                        ('3XL', '3xl')]
+CLOTHES_SIZE_CHOICES = [('S', 'S'),
+                        ('M', 'M'),
+                        ('L', 'L'),
+                        ('XL', 'XL'), 
+                        ('2XL', '2XL'), 
+                        ('3XL', '3XL')]
 
 CLOTHES_BRANDS_CHOICES = [('superdry', 'Superdry'),
                           ('diesel', 'Diesel'),
@@ -20,7 +20,8 @@ CLOTHES_BRANDS_CHOICES = [('superdry', 'Superdry'),
 CHOTLES_TYPE = [('T-shirts', 'Тениски'),
                 ('Hoodies', 'Суитшърти'),
                 ('Tops', 'Блузи'),
-                ('Jackets', 'Якета')]
+                ('Jackets', 'Якета'),
+                ('Pants', 'Долнища')]
 
 
 class ClothesSearch(models.Model):

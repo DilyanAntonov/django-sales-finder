@@ -8,6 +8,7 @@ import re
 def ClothesFashionDaysScraper(sex, size, brand, clothes_type):
     all_items = []
     org_brand = brand
+    org_clothes = clothes_type
 
     # Setting URL Codes
     if sex == 'Man':
@@ -23,15 +24,22 @@ def ClothesFashionDaysScraper(sex, size, brand, clothes_type):
         clothes_type = '%D0%94%D1%80%D0%B5%D1%85%D0%B8-%D0%91%D0%BB%D1%83%D0%B7%D0%B8'
     elif clothes_type == 'Jackets':
         clothes_type = '%D0%94%D1%80%D0%B5%D1%85%D0%B8-%D0%AF%D0%BA%D0%B5%D1%82%D0%B0'
+    elif clothes_type == 'Pants':
+        clothes_type = '%D0%94%D1%80%D0%B5%D1%85%D0%B8-%D0%9F%D0%B0%D0%BD%D1%82%D0%B0%D0%BB%D0%BE%D0%BD%D0%B8'
 
     if brand == 'adidas':
-        brand = 'adidas_performance'
+        brand = 'adidas_originals+adidas_performance'
 
     page_num = 1
     last_page = 1
 
     base_url = f'https://www.fashiondays.bg/g/{sex}-{brand}/{clothes_type}'
-    sizes_url = f'size[70__{size}]=70__{size}'
+
+    if org_clothes == 'Pants':
+        sizes_url = f'size[69__{size.lower()}]=69__{size.lower()}'
+    else:
+        sizes_url = f'size[70__{size.lower()}]=70__{size.lower()}'
+
     joined_url = f'{base_url}?{sizes_url}'
 
     uClient = uReq(joined_url)
@@ -102,6 +110,8 @@ def ClothesRemixWebScraper(sex, size, brand, clothes_type):
 
     if clothes_type == "Hoodies":
         clothes_type = 'sweatshirts'
+    elif clothes_type == "Pants":
+        clothes_type = 'trousers'
     else:
         clothes_type = clothes_type.lower()
 
@@ -168,6 +178,8 @@ def ClothesGlamiWebScraper(sex, size, brand, clothes_type):
         elif clothes_type == "Jackets":
             clothes_type = "aketa-i-palta"
             sex = 'mzki'
+        elif clothes_type == "Pants":
+            return []
 
     if brand == 'adidas':
         brand = 'adidas/adidas-originals/adidas-performance'
@@ -177,7 +189,9 @@ def ClothesGlamiWebScraper(sex, size, brand, clothes_type):
     if size == "3XL":
         return []
 
-    uClient = uReq(f"https://www.glami.bg/{brand}/{sex}-{clothes_type}/aboutyou-bg/answear-bg/bibloo-bg/fashiondays-bg/modivo-bg/nad-10-procenta/{size}")
+    url = f"https://www.glami.bg/{brand}/{sex}-{clothes_type}/aboutyou-bg/answear-bg/bibloo-bg/modivo-bg/nad-10-procenta/{size.lower()}"
+    uClient = uReq(url)
+    
     page_html = uClient.read()
     page_soup = soup(page_html, "html.parser")
 
@@ -213,13 +227,15 @@ def ClothesSportDepotWebScraper(sex, size, brand, clothes_type):
         sex ="jeni"
 
     if clothes_type == 'T-shirts':
-        clothes_type == 'teniski_i_potnici-2_35_103'
+        clothes_type = 'teniski_i_potnici-2_35_103'
     elif clothes_type == 'Hoodies':
         clothes_type = 'suitsharti_i_gornishta-2_35_102'
     elif clothes_type == 'Tops':
-        clothes_type == 'bluzi-2_35_1'
+        clothes_type = 'bluzi-2_35_1'
     elif clothes_type == 'Jackets':
-        clothes_type == 'yaketa-2_35_6'
+        clothes_type = 'yaketa-2_35_6'
+    elif clothes_type == 'Pants':
+        clothes_type = 'pantaloni-2_35_2'
 
     if brand == 'adidas':
         brand = 'adidas?promotion=1&brandId=7'

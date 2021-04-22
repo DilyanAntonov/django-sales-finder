@@ -16,11 +16,16 @@
 
 .about-title {
   color: #ffffff;
-  font-size: 30;
+  font-size: 40px;
 }
 
 .about-text {
-  font-size: 20;
+  font-size: 25px; 
+  padding-top: 20px;
+}
+
+.not-found {
+  margin-top: 20%;
 }
 
 /* HOME AND FORMS PAGES */
@@ -48,7 +53,6 @@
   margin-left: 5%;
   margin-right: 5%;
 }
-
 
 /* SEARCH PAGES */
 .products-img {
@@ -88,6 +92,10 @@
     margin-left: 0%;
     margin-right: 0%;
   }
+
+  .not-found {
+    margin-top: 30%;
+  }
 }
 
 @media (max-width: 700px) {
@@ -117,6 +125,35 @@
     margin-top: -10%;
     margin-left: 0%;
     margin-right: 0%;
+  }
+
+  .boxed {
+    margin-top: 25%;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-bottom: 5%;
+    border-radius: 25px;
+    background-color: #343a40;
+  } 
+  
+  .about-block {
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-bottom: 2%;
+    padding-top: 2%;
+  }
+  
+  .about-title {
+    color: #ffffff;
+    font-size: 30px;
+  }
+  
+  .about-text {
+    font-size: 20px;
+  }
+
+  .not-found {
+    margin-top: 70%;
   }
 }
 
