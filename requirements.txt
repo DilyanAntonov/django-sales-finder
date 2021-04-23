@@ -1,7 +1,9 @@
 asgiref==3.3.4
 beautifulsoup4==4.9.3
 dj-database-url==0.5.0
-Django==3.2
+Django==2.2.4
+django-appconf==1.0.3
+djangorestframework==3.10.3
 django-heroku==0.3.1
 gunicorn==20.1.0
 psycopg2==2.8.6
@@ -14,3 +16,5 @@ urllib3==1.25.3
 regex==2019.12.20
 json5==0.9.4
 Jinja2==2.10.3
+lxml==4.6.3
+html5lib==1.1
