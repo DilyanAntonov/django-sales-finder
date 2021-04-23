@@ -31,7 +31,7 @@ class ClothesSearch(models.Model):
     clothes_type = models.CharField(max_length=500, choices=CHOTLES_TYPE, default=CHOTLES_TYPE[0][0])
 
     def __str__(self):
-        return self.brand
+        return self.clothes_type
 
 class ClothesItem(models.Model):
     brand = models.CharField(max_length=50)
