@@ -321,7 +321,8 @@ def ShoesGlamiWebScraper(sex, size, brand):
     elif size == '48':
         size = 'eu-48/eu-48-1_3/eu-48-2_3/eu-48.5/'
 
-    url = f"https://www.glami.bg/{brand}/{sex}-obuvki/aboutyou-bg/bibloo-bg/footshop-bg/modivo-bg/obuvki-bg/remixshop-com/answear-bg/nad-10-procenta/{size}?o=2"
+    url = f"https://www.glami.bg/{brand}/{sex}-obuvki/aboutyou-bg/bibloo-bg/footshop-bg/modivo-bg/obuvki-bg/answear-bg/nad-10-procenta/{size}?o=2"
+    print(url)
     uClient = uReq(url)
     page_html = uClient.read()
     page_soup = soup(page_html, "html.parser")
