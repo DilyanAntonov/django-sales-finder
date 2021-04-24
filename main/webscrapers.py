@@ -401,16 +401,16 @@ def ShoesGlamiWebScraper(sex, size, brand):
     # Finding the number of pages
     items_num_text = page_soup.find("div", {"class","header__description"}).text[:-20]
     items_num = int(re.findall("\d+", items_num_text)[0])
-    pages_num = int(items_num / 120) + 1
+    pages_num = math.ceil(items_num / 120)
     
-    for page in range(1, pages_num+1):
+    for page in range(1, pages_num):
         page_url = f"https://www.glami.bg/{brand}/{sex}-obuvki/aboutyou-bg/answear-bg/{size}footshop-bg/gomez-bg/obuvki-bg/shopsector-com/nad-10-procenta/?o=2&p={page}"
-        uClient = uReq(page_url)
-        page_html = uClient.read()
-        page_soup = soup(page_html, "html.parser")
-        containers = page_soup.findAll("a", {"class":"needsclick tr-item-link j-track-ec"})
+        page_uClient = uReq(page_url)
+        page_new_html = page_uClient.read()
+        page_new_soup = soup(page_new_html, "html.parser")
+        new_containers = page_new_soup.findAll("a", {"class":"needsclick tr-item-link j-track-ec"})
 
-        for container in containers:
+        for container in new_containers:
             link = container['href']
 
             try:
@@ -421,13 +421,14 @@ def ShoesGlamiWebScraper(sex, size, brand):
             try:
                 discount_price = container.find("span", {"class":"item-price__new"}).text[:-3]
                 original_price = container.find("strike", {"class":"item__price__old"}).text[:-3]
-            except:
-                pass
 
-            all_items.append({'brand': org_brand.upper(),
+                all_items.append({'brand': org_brand.upper(),
                     'link': link,
                     'pic': picture,
                     'disc_price': float(discount_price.replace(",",".")),
                     'org_price': float(original_price.replace(",",".")),
                 })
+            except:
+                pass
+
     return all_items
