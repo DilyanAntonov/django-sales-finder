@@ -4,7 +4,7 @@ from .models import ClothesItem, ClothesSearch
 from .models import ShoesItem, ShoesSearch
 from .forms import ClothesSearchForm, ShoesSearchForm
 from .webscrapers import ClothesFashionDaysScraper, ClothesRemixWebScraper, ClothesGlamiWebScraper, ClothesSportDepotWebScraper
-from .webscrapers import ShoesSportDepotWebScraper, ShoesFootshopWebScraper
+from .webscrapers import ShoesSportDepotWebScraper, ShoesGlamiWebScraper
 import json
 import urllib
 
@@ -107,7 +107,7 @@ def shoes_search(request):
 
     all_items = []
     sportdepot_items = []
-    footshop_items = []
+    glami_items = []
 
     sex = model_to_dict(ShoesSearch.objects.filter()[0])['sex']
     size = model_to_dict(ShoesSearch.objects.filter()[0])['size']
@@ -118,14 +118,14 @@ def shoes_search(request):
     except:
         pass
     try:
-        footshop_items = ShoesFootshopWebScraper(sex, size, brand)
+        glami_items = ShoesGlamiWebScraper(sex, size, brand)
     except:
         pass
-     
+
     if len(sportdepot_items) > 0: 
         all_items += sportdepot_items
-    if len(footshop_items) > 0:
-        all_items += footshop_items
+    if len(glami_items) > 0:
+        all_items += glami_items    
 
     if all_items == []:
         return render(request, 'main/notfound.html')

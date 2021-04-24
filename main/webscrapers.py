@@ -351,7 +351,8 @@ def ShoesSportDepotWebScraper(sex, size, brand):
 
     return all_items
 
-def ShoesFootshopWebScraper(sex, size, brand):
+def ShoesGlamiWebScraper(sex, size, brand):
+    # Includes FootShop.bg, Obuvki.bg, Bibloo.bg, Answear.bg
     all_items = []
     org_brand = brand
 
@@ -393,32 +394,35 @@ def ShoesFootshopWebScraper(sex, size, brand):
     elif size == '48':
         size = 'eu-48/eu-48-1_3/eu-48-2_3/eu-48.5/'
 
-    url = f"https://www.glami.bg/{brand}/{sex}-obuvki/{size}footshop-bg/nad-10-procenta/?o=2"
-    uClient = uReq(url)
-    page_html = uClient.read()
-    page_soup = soup(page_html, "html.parser")
-    
-    containers = page_soup.findAll("a", {"class":"needsclick tr-item-link j-track-ec"})
+    websites = ['footshop-bg','obuvki-bg','bibloo-bg', 'answear-bg']
 
-    for container in containers:
-        link = container['href']
+    for website in websites:
+        url = f"https://www.glami.bg/{brand}/{sex}-obuvki/{size}{website}/nad-10-procenta/?o=2"
+        uClient = uReq(url)
+        page_html = uClient.read()
+        page_soup = soup(page_html, "html.parser")
+        
+        containers = page_soup.findAll("a", {"class":"needsclick tr-item-link j-track-ec"})
 
-        try:
-            picture = container.find("img")["data-src"]
-        except:
-            picture = container.find("img")["src"]
+        for container in containers:
+            link = container['href']
 
-        try:
-            discount_price = container.find("span", {"class":"item-price__new"}).text[:-3]
-            original_price = container.find("strike", {"class":"item__price__old"}).text[:-3]
+            try:
+                picture = container.find("img")["data-src"]
+            except:
+                picture = container.find("img")["src"]
 
-            all_items.append({'brand': org_brand.upper(),
-                'link': link,
-                'pic': picture,
-                'disc_price': float(discount_price.replace(",",".")),
-                'org_price': float(original_price.replace(",",".")),
-            })
-        except:
-            pass
+            try:
+                discount_price = container.find("span", {"class":"item-price__new"}).text[:-3]
+                original_price = container.find("strike", {"class":"item__price__old"}).text[:-3]
+
+                all_items.append({'brand': org_brand.upper(),
+                    'link': link,
+                    'pic': picture,
+                    'disc_price': float(discount_price.replace(",",".")),
+                    'org_price': float(original_price.replace(",",".")),
+                })
+            except:
+                pass
 
     return all_items
