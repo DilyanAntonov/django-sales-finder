@@ -395,7 +395,6 @@ def ShoesGlamiWebScraper(sex, size, brand):
         size = 'eu-48/eu-48-1_3/eu-48-2_3/eu-48.5/'
 
     url = f"https://www.glami.bg/{brand}/{sex}-obuvki/aboutyou-bg/bibloo-bg/footshop-bg/modivo-bg/obuvki-bg/answear-bg/nad-10-procenta/{size}?o=2"
-    print(url)
     uClient = uReq(url)
     page_html = uClient.read()
     page_soup = soup(page_html, "html.parser")
@@ -406,7 +405,7 @@ def ShoesGlamiWebScraper(sex, size, brand):
     pages_num = math.ceil(items_num / 120)
     
     for page in range(1, pages_num+1):
-        url = f"https://www.glami.bg/{brand}/{sex}-obuvki/aboutyou-bg/answear-bg/footshop-bg/gomez-bg/obuvki-bg/shopsector-com/nad-10-procenta/{size}?p={page}&o=2"
+        url = f"https://www.glami.bg/{brand}/{sex}-obuvki/aboutyou-bg/answear-bg/footshop-bg/gomez-bg/obuvki-bg/shopsector-com/nad-10-procenta/{size}?&o=2&p={page}"
         uClient = uReq(url)
         page_html = uClient.read()
         page_soup = soup(page_html, "html.parser")
