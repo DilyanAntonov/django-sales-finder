@@ -351,7 +351,6 @@ def ShoesSportDepotWebScraper(sex, size, brand):
 
     return all_items
 
-
 def ShoesGlamiWebScraper(sex, size, brand):
     all_items = []
     org_brand = brand
@@ -402,7 +401,7 @@ def ShoesGlamiWebScraper(sex, size, brand):
     # Finding the number of pages
     items_num_text = page_soup.find("div", {"class","header__description"}).text[:-20]
     items_num = int(re.findall("\d+", items_num_text)[0])
-    pages_num = math.ceil(items_num / 120)
+    pages_num = int(items_num / 120) + 1
     
     for page in range(1, pages_num+1):
         page_url = f"https://www.glami.bg/{brand}/{sex}-obuvki/aboutyou-bg/answear-bg/{size}footshop-bg/gomez-bg/obuvki-bg/shopsector-com/nad-10-procenta/?o=2&p={page}"
