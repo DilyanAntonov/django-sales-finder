@@ -362,7 +362,7 @@ def ShoesSportDepotWebScraper(sex, size, brand):
 
 
 # Webscrapes Shoes from glami.bg, including
-# footshop.bg, obuvki.bg, bibloo.bg, answear.bg
+# footshop.bg, obuvki.bg, bibloo.bg
 def ShoesGlamiWebScraper(sex, size, brand):
     all_items = []
     org_brand = brand
@@ -405,7 +405,7 @@ def ShoesGlamiWebScraper(sex, size, brand):
     elif size == '48':
         size = 'eu-48/eu-48-1_3/eu-48-2_3/eu-48.5/'
 
-    websites = ['footshop-bg','obuvki-bg','bibloo-bg', 'answear-bg']
+    websites = ['footshop-bg','obuvki-bg','bibloo-bg']
 
     for website in websites:
         url = f"https://www.glami.bg/{brand}/{sex}-obuvki/{size}{website}/nad-10-procenta/?o=2"
