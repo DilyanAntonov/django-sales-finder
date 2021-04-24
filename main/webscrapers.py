@@ -362,7 +362,7 @@ def ShoesFootshopWebScraper(sex, size, brand):
         sex = 'mzki'
 
     if brand == 'adidas':
-        brand = 'adidas/adidas-consortium/adidas-originals/adidas-performance'
+        brand = 'adidas/adidas-originals/adidas-performance'
     if brand == 'nike':
         brand = 'air-jordan-nike/nike/nike-performance/nike-sportswear'
 
