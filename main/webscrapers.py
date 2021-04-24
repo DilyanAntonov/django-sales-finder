@@ -5,6 +5,7 @@ import math
 import re
 
 
+# Webscrapes Clothes from fashiondays.bg
 def ClothesFashionDaysScraper(sex, size, brand, clothes_type):
     all_items = []
     org_brand = brand
@@ -98,6 +99,8 @@ def ClothesFashionDaysScraper(sex, size, brand, clothes_type):
         page_num += 1
     return all_items
 
+
+# Webscrapes Clothes from remixshop.com/bg
 def ClothesRemixWebScraper(sex, size, brand, clothes_type):
     all_items = []
     org_brand = brand
@@ -149,6 +152,9 @@ def ClothesRemixWebScraper(sex, size, brand, clothes_type):
                 })
     return all_items
 
+
+# Webscrapes Clothes from glami.bg, including
+# aboutyou.bg, answear.bg,  bibloo.bg, modivo.bg
 def ClothesGlamiWebScraper(sex, size, brand, clothes_type):
     all_items = []
     org_brand = brand
@@ -216,6 +222,8 @@ def ClothesGlamiWebScraper(sex, size, brand, clothes_type):
             })
     return all_items
 
+
+# Webscrapes Clothes from sportdepot.bg
 def ClothesSportDepotWebScraper(sex, size, brand, clothes_type):
     all_items = []
     org_brand = brand
@@ -279,8 +287,9 @@ def ClothesSportDepotWebScraper(sex, size, brand, clothes_type):
         })
     return all_items
 
-def ShoesSportDepotWebScraper(sex, size, brand):
 
+# Webscrapes Shoes from sportdepot.bg
+def ShoesSportDepotWebScraper(sex, size, brand):
     all_items = []
     org_brand = brand
 
@@ -351,8 +360,10 @@ def ShoesSportDepotWebScraper(sex, size, brand):
 
     return all_items
 
+
+# Webscrapes Shoes from glami.bg, including
+# footshop.bg, obuvki.bg, bibloo.bg, answear.bg
 def ShoesGlamiWebScraper(sex, size, brand):
-    # Includes FootShop.bg, Obuvki.bg, Bibloo.bg, Answear.bg
     all_items = []
     org_brand = brand
 

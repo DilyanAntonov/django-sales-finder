@@ -73,13 +73,11 @@ def clothes_search(request):
     else:
         for item in all_items:
             product = ClothesItem()
-
             product.brand = item['brand']
             product.link = item['link']
             product.pic = item['pic']
             product.disc_price = item['disc_price']
             product.org_price = item['org_price']
-
             product.save()
 
         context = {
@@ -100,7 +98,6 @@ def shoes(request):
 
     context = {'form': form}
     return render(request, 'main/shoes/shoes-home.html', context)
-
 
 def shoes_search(request):
     ShoesItem.objects.all().delete()
@@ -132,13 +129,11 @@ def shoes_search(request):
     else:
         for item in all_items:
             product = ShoesItem()
-
             product.brand = item['brand']
             product.link = item['link']
             product.pic = item['pic']
             product.disc_price = item['disc_price']
             product.org_price = item['org_price']
-
             product.save()
 
         context = {
