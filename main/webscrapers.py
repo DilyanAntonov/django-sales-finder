@@ -437,3 +437,46 @@ def ShoesGlamiWebScraper(sex, size, brand):
                 pass
 
     return all_items
+
+
+# Webscrapes Shoes from remixshop.bg
+def ShoesRemixWebScraper(sex, size, brand):
+    all_items = []
+    org_brand = brand
+
+    # Setting URL Codes
+    if sex == "Man":
+        sex = 'mens'
+    elif sex == "Women":
+        sex ="womens"
+
+    if brand == 'adidas':
+        brand = '853,5610,5611,5612,33091,76789,79057,80068,86550,89433,89484,90533'
+    elif brand == 'nike':
+        brand = '958,5619,6752,7989,21767,76600,79993'
+
+
+    size = size.upper()
+
+    url = f'https://remixshop.com/bg/shoes/{sex}-shoes?brand={brand}&size={size}&new=1&promo=2-20,20-40,40-60,60-75,75-100'
+
+    uClient = uReq(url)
+    page_html = uClient.read()
+    page_soup = soup(page_html, "html.parser")
+
+    containers = page_soup.findAll("div", {"class":"product-box"})
+
+    for container in containers:
+        link = container.find("a", {"class":"product-photos"})["href"]
+
+        original_price = container.find("span", {"class":"old-price"}).text.strip()[:-4]
+        discount_price = container.find("span", {"class":"new-price"}).text.strip()[:-4]
+        picture = container.find("img", {"class":"img-fluid"})["src"]
+        
+        all_items.append({'brand': org_brand.upper(),
+                    'link': link,
+                    'pic': picture,
+                    'disc_price': float(discount_price.replace(",",".")),
+                    'org_price': float(original_price.replace(",","."))
+                })
+    return all_items
