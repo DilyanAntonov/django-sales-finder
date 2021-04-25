@@ -30,6 +30,10 @@ def ClothesFashionDaysScraper(sex, size, brand, clothes_type):
 
     if brand == 'adidas':
         brand = 'adidas_originals+adidas_performance'
+    elif brand == 'poloralphlauren':
+        brand = 'polo_ralph_lauren'
+    elif brand == 'guess':
+        brand = 'guess+guess_jeans'
 
     page_num = 1
     last_page = 1
@@ -124,6 +128,12 @@ def ClothesRemixWebScraper(sex, size, brand, clothes_type):
         brand = "1116"
     elif brand == "adidas":
         brand = "853,5610,5611,5612,33091,76789,79057,80068,86550,89433,89484,90533"
+    elif brand == 'nike':
+        brand = '958,5619,6752,7989,21767,76600,79993'
+    elif brand == 'poloralphlauren':
+        brnad = '22396'
+    elif brand == 'guess':
+        brand = '776'
     elif brand == "napapijri":
         brand = "3831"
 
@@ -189,6 +199,12 @@ def ClothesGlamiWebScraper(sex, size, brand, clothes_type):
 
     if brand == 'adidas':
         brand = 'adidas/adidas-originals/adidas-performance'
+    elif brand == 'nike':
+        brand = 'nike/nike-golf/nike-sportswear'
+    elif brand == 'poloralphlauren':
+        brand = 'polo-by-ralph-lauren/polo-ralph-lauren'
+    elif brand == 'guess':
+        brand = 'guess/guess-jeans'
 
     if size == "2XL":
         size = "xxl"
@@ -247,6 +263,8 @@ def ClothesSportDepotWebScraper(sex, size, brand, clothes_type):
 
     if brand == 'adidas':
         brand = 'adidas?promotion=1&brandId=7'
+    elif brand == 'nike':
+        brand = 'nike?promotion=1&brandId=136'
 
     if size == 'S':
         size = '104'

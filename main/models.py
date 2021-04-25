@@ -15,14 +15,16 @@ CLOTHES_SIZE_CHOICES = [('S', 'S'),
 CLOTHES_BRANDS_CHOICES = [('superdry', 'Superdry'),
                           ('diesel', 'Diesel'),
                           ('adidas', 'Adidas'),
-                          ('napapijri', 'Napapijri')]
+                          ('nike', 'Nike'),
+                          ('poloralphlauren', 'Polo Ralph Lauren'),
+                          ('napapijri', 'Napapijri'),
+                          ('guess', 'Guess')]
 
 CHOTLES_TYPE = [('T-shirts', 'Тениски'),
                 ('Hoodies', 'Суитшърти'),
                 ('Tops', 'Блузи'),
                 ('Jackets', 'Якета'),
                 ('Pants', 'Долнища')]
-
 
 class ClothesSearch(models.Model):
     sex = models.CharField(max_length=50, choices=SEX_CHOICES, default=SEX_CHOICES[0][0])
@@ -42,7 +44,6 @@ class ClothesItem(models.Model):
 
     def __str__(self):
         return self.brand
-
 
 # Shoes Form Fields
 SHOES_SIZE_CHOICES = [('36', '36'), 
