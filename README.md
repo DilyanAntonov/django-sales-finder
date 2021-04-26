@@ -9,6 +9,7 @@ https://djangosalesfinder.herokuapp.com/
 * Python :snake:
 * Django :computer:
 * BeautifulSoup :stew:
+* HTML/CSS/BOOTSTRAP :fireworks:
 
 ## Run on your :computer:
 
